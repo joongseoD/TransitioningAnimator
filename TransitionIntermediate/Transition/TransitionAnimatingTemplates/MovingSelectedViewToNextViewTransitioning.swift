@@ -9,7 +9,7 @@ import UIKit
 
 class MovingSelectedViewToNextViewTransitioning: NSObject, TransitionAnimator {
     var isPresenting = false
-    var duration = 0.3
+    var duration = 0.4
     let selectedView: UIView
     var initalFrame: CGRect
     
@@ -44,18 +44,23 @@ extension MovingSelectedViewToNextViewTransitioning: UIViewControllerAnimatedTra
         containerView.addSubview(backgroundView)
         containerView.addSubview(selectedView)
         
-        guard let secondViewController = transitionContext.viewController(forKey: .to) as? DetailViewController else { return }
-        let imageViewRect = secondViewController.thumbnailImageView.convert(secondViewController.thumbnailImageView.bounds, to: secondViewController.view)
-        let tableViewRect = secondViewController.tableView.convert(secondViewController.tableView.bounds, to: secondViewController.view)
-        secondViewController.tableView.frame = CGRect(x: 0, y: 1000, width: secondViewController.view.frame.width, height: secondViewController.view.frame.height)
+        guard let destinationController = transitionContext.viewController(forKey: .to) as? TransitionDestination else { return }
+        guard destinationController.animationViews.count >= 2 else { return }
+        let destinationView = destinationController.animationViews[0]
+        let moveUpView = destinationController.animationViews[1]
+        destinationView.alpha = 0
+        let destinationViewRect = destinationView.convert(destinationView.bounds, to: destinationController.view)
+        let moveUpViewRect = moveUpView.convert(moveUpView.bounds, to: destinationController.view)
         selectedView.frame = initalFrame
+        moveUpView.frame = CGRect(x: 0, y: moveUpViewRect.minY, width: moveUpViewRect.width, height: 100)
         
         UIView.animate(withDuration: duration) { [weak self] in
             guard let self = self else { return }
-            self.selectedView.frame = imageViewRect
-            secondViewController.tableView.frame = tableViewRect
+            self.selectedView.frame = destinationViewRect
+            moveUpView.frame = moveUpViewRect
             toView.alpha = 1
         } completion: { [weak self] in
+            destinationView.alpha = 1
             backgroundView.removeFromSuperview()
             self?.selectedView.removeFromSuperview()
             transitionContext.completeTransition($0)

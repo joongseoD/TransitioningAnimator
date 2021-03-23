@@ -7,13 +7,9 @@
 
 import UIKit
 
-protocol TransitionDestination where Self: UIViewController {
-    var animationViews: [UIView] { get }
-}
-
 class DetailViewController: UIViewController, TransitionDestination {
     var animationViews: [UIView] {
-        return [thumbnailImageView]
+        return [thumbnailImageView, tableView]
     }
     
     @IBOutlet weak var thumbnailImageView: UIView!
@@ -22,6 +18,10 @@ class DetailViewController: UIViewController, TransitionDestination {
     
     fileprivate var data = (0...100).map { String($0) }
     var thumbnamilImageViewBackgroundColor: UIColor = .red
+    
+    deinit {
+        print("deinit")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,6 @@ class DetailViewController: UIViewController, TransitionDestination {
     private func setupUI() {
         tableView.delegate = self
         tableView.dataSource = self
-        
         thumbnailImageView.backgroundColor = thumbnamilImageViewBackgroundColor
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))

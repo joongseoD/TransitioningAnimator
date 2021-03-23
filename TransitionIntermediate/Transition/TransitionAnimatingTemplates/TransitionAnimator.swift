@@ -14,3 +14,7 @@ protocol TransitionAnimator {
     
     func transitioningAnimator(isPresenting: Bool) -> Self?
 }
+
+protocol TransitionDestination where Self: UIViewController {
+    var animationViews: [UIView] { get }
+}
