@@ -10,6 +10,7 @@ import UIKit
 enum TransitionAnimatingStyle {
     case movingSelectedViewToNextView(selectedView: UIView, selectedViewFrame: CGRect)
     case growingView(initalFrame: CGRect)
+    case spinSelectedView(_ view: UIView, frame: CGRect)
     
     var animator: (UIViewControllerAnimatedTransitioning & TransitionAnimator)? {
         switch self {
@@ -17,6 +18,8 @@ enum TransitionAnimatingStyle {
             return MovingSelectedViewToNextViewTransitioning(selectedView: selectedView, initalFrame: frame)
         case let .growingView(initalFrame):
             return GrowingViewAnimationTransitioning(initialFrame: initalFrame)
+        case let .spinSelectedView(view, frame):
+            return SpinSelectedViewAnimationTransitioning(selectedView: view, initialFrame: frame)
         default:
             return nil
         }

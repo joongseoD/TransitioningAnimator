@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D14293972609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14293962609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift */; };
 		D18ED25C2608571A00029085 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED25B2608571A00029085 /* AppDelegate.swift */; };
 		D18ED25E2608571A00029085 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED25D2608571A00029085 /* SceneDelegate.swift */; };
 		D18ED2602608571A00029085 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED25F2608571A00029085 /* ViewController.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D14293962609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinSelectedViewAnimationTransitioning.swift; sourceTree = "<group>"; };
 		D18ED2582608571A00029085 /* TransitionIntermediate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransitionIntermediate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D18ED25B2608571A00029085 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D18ED25D2608571A00029085 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				D18ED27326085DDA00029085 /* TransitionAnimator.swift */,
 				D18ED2922609E8EA00029085 /* MovingSelectedViewToNextViewTransitioning.swift */,
 				D18ED29E2609F07700029085 /* GrowingViewAnimationTransitioning.swift */,
+				D14293962609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift */,
 			);
 			path = TransitionAnimatingTemplates;
 			sourceTree = "<group>";
@@ -171,6 +174,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D14293972609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift in Sources */,
 				D18ED2602608571A00029085 /* ViewController.swift in Sources */,
 				D18ED2972609E99300029085 /* TransitionAnimatingStyle.swift in Sources */,
 				D18ED25C2608571A00029085 /* AppDelegate.swift in Sources */,

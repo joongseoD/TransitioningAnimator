@@ -42,7 +42,11 @@ extension ViewController: UICollectionViewDelegate {
            let snapshotView = selectedCell.snapshotView(afterScreenUpdates: true) {
             let snapshotFrame = collectionView.superview!.convert(selectedCell.frame, from: collectionView)
             if indexPath.row.isMultiple(of: 2) {
-                transitionDelegate.set(transition: .growingView(initalFrame: snapshotFrame))
+                if indexPath.row == 0 {
+                    transitionDelegate.set(transition: .growingView(initalFrame: snapshotFrame))
+                } else {
+                    transitionDelegate.set(transition: .spinSelectedView(snapshotView, frame: snapshotFrame))
+                }
                 detailViewController.transitioningDelegate = transitionDelegate
                 detailViewController.modalPresentationStyle = .overCurrentContext
                 present(detailViewController, animated: true, completion: nil)
