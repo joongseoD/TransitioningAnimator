@@ -6,7 +6,6 @@
 //
 
 import UIKit
-//enum으로 트랜지션 정의
 
 protocol TransitionAnimator {
     var duration: TimeInterval { get set }
