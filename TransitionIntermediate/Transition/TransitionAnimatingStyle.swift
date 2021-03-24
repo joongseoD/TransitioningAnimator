@@ -25,3 +25,24 @@ enum TransitionAnimatingStyle {
         }
     }
 }
+
+extension TransitionAnimatingStyle: CaseIterable {
+    static var allCases: [Self] {
+        return [.spinSelectedView(.init(frame: .zero), frame: .zero),
+                .growingView(initalFrame: .zero),
+                .movingSelectedViewToNextView(selectedView: .init(frame: .zero), selectedViewFrame: .zero)]
+    }
+}
+
+extension TransitionAnimatingStyle: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .movingSelectedViewToNextView(selectedView: _, selectedViewFrame: _):
+            return "MovingSelectedView"
+        case .growingView(initalFrame: _):
+            return "Growing"
+        case .spinSelectedView(_, frame: _):
+            return "SpinSelectedView"
+        }
+    }
+}

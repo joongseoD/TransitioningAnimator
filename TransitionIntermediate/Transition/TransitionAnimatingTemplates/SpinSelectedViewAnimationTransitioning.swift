@@ -46,6 +46,7 @@ extension SpinSelectedViewAnimationTransitioning: UIViewControllerAnimatedTransi
         guard let detinationAnimationView = destinationController.animationViews.first else { return }
         let imageViewRect = detinationAnimationView.convert(detinationAnimationView.bounds, to: destinationController.view)
         
+        //key frame 
         UIView.animate(withDuration: 0.3) {
             self.selectedView.transform = CGAffineTransform(scaleX: 2, y: 2)
             self.selectedView.center = containerView.center

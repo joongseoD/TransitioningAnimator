@@ -30,27 +30,29 @@ extension MovingSelectedViewToNextViewTransitioning: UIViewControllerAnimatedTra
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let containerView = transitionContext.containerView
         guard let toView = transitionContext.view(forKey: .to) else {
             transitionContext.completeTransition(false)
             return
         }
-        containerView.addSubview(toView)
-        toView.alpha = 0
-        let whiteView = UIView(frame: containerView.bounds)
-        whiteView.backgroundColor = .clear
+        guard let destinationController = transitionContext.viewController(forKey: .to) as? TransitionDestination,
+              destinationController.animationViews.count >= 2 else {
+            transitionContext.completeTransition(false)
+            return
+        }
+        
+        let containerView = transitionContext.containerView
         let backgroundView = UIView(frame: containerView.bounds)
-        backgroundView.addSubview(whiteView)
+        containerView.addSubview(toView)
         containerView.addSubview(backgroundView)
         containerView.addSubview(selectedView)
         
-        guard let destinationController = transitionContext.viewController(forKey: .to) as? TransitionDestination else { return }
-        guard destinationController.animationViews.count >= 2 else { return }
         let destinationView = destinationController.animationViews[0]
         let moveUpView = destinationController.animationViews[1]
-        destinationView.alpha = 0
         let destinationViewRect = destinationView.convert(destinationView.bounds, to: destinationController.view)
         let moveUpViewRect = moveUpView.convert(moveUpView.bounds, to: destinationController.view)
+        
+        toView.alpha = 0
+        destinationView.alpha = 0
         selectedView.frame = initalFrame
         moveUpView.frame = CGRect(x: 0, y: moveUpViewRect.minY, width: moveUpViewRect.width, height: 100)
         

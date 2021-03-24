@@ -8,59 +8,111 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var collectionView: UICollectionView!
-    private lazy var colors: [UIColor] = [.blue, .brown, .cyan, .darkGray, .green, .magenta, .orange, .systemPink, .red].lazy.shuffled()
+    @IBOutlet weak var tableView: UITableView!
     private let transitionDelegate = TransitionAnimatingDelegate()
-    private var selectedCell: UIView?
-    private var selectedCellFrame: CGRect = .zero
     
     override func viewDidLoad() {
         super.viewDidLoad()
      
         setupUI()
     }
+    
+    private lazy var tappedItem: ((_ transitionStyle: TransitionAnimatingStyle, _ color: UIColor) -> Void) = {
+        return { [weak self] style, color in
+            guard let self = self else { return }
+            guard let detailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as? DetailViewController else { return }
+            detailViewController.thumbnamilImageViewBackgroundColor = color
+            
+            if (0...1).randomElement()?.isMultiple(of: 2) ?? true {
+                self.transitionDelegate.transitionStyle = style
+                detailViewController.transitioningDelegate = self.transitionDelegate
+                detailViewController.modalPresentationStyle = .overCurrentContext
+                
+                self.present(detailViewController, animated: true, completion: nil)
+            } else {
+                self.transitionDelegate.transitionStyle = style
+                self.navigationController?.pushViewController(detailViewController, animated: true)
+            }
+        }
+    }()
 
     private func setupUI() {
+        navigationController?.delegate = transitionDelegate
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+     
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+}
+
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return TransitionAnimatingStyle.allCases[section].description
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+}
+
+extension ViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return TransitionAnimatingStyle.allCases.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TransitionStyleTableViewCell else { return UITableViewCell() }
+        cell.configure(transitionStyle: TransitionAnimatingStyle.allCases[indexPath.section], tapEvent: tappedItem)
+        return cell
+    }
+}
+
+//MARK: - TableViewCell
+class TransitionStyleTableViewCell: UITableViewCell {
+    @IBOutlet weak var collectionView: UICollectionView!
+    private lazy var colors: [UIColor] = [.blue, .brown, .cyan, .darkGray, .green, .magenta, .orange, .systemPink, .red].lazy.shuffled()
+    private var transitionStyle: TransitionAnimatingStyle?
+    private var didTapItem: ((TransitionAnimatingStyle, UIColor) -> Void)?
+    
+    func configure(transitionStyle: TransitionAnimatingStyle, tapEvent: ((TransitionAnimatingStyle, UIColor) -> Void)?) {
+        self.transitionStyle = transitionStyle
+        self.didTapItem = tapEvent
         collectionView.delegate = self
         collectionView.dataSource = self
     }
 }
-extension ViewController: UICollectionViewDelegateFlowLayout {
+
+extension TransitionStyleTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 150, height: 150)
     }
 }
 
-extension ViewController: UICollectionViewDelegate {
+extension TransitionStyleTableViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let detailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as? DetailViewController else { return }
-        let color = colors[indexPath.row]
-        detailViewController.thumbnamilImageViewBackgroundColor = color
-        
         if let selectedCell = collectionView.cellForItem(at: indexPath),
            let snapshotView = selectedCell.snapshotView(afterScreenUpdates: true) {
-            let snapshotFrame = collectionView.superview!.convert(selectedCell.frame, from: collectionView)
-            if indexPath.row.isMultiple(of: 2) {
-                if indexPath.row == 0 {
-                    transitionDelegate.set(transition: .growingView(initalFrame: snapshotFrame))
-                } else {
-                    transitionDelegate.set(transition: .spinSelectedView(snapshotView, frame: snapshotFrame))
-                }
-                detailViewController.transitioningDelegate = transitionDelegate
-                detailViewController.modalPresentationStyle = .overCurrentContext
-                present(detailViewController, animated: true, completion: nil)
-            } else {
-                transitionDelegate.set(transition: .movingSelectedViewToNextView(selectedView: snapshotView, selectedViewFrame: snapshotFrame))
-                navigationController?.delegate = transitionDelegate
-                navigationController?.interactivePopGestureRecognizer?.delegate = nil
-                navigationController?.pushViewController(detailViewController, animated: true)
+            var snapshotFrame = superview!.convert(selectedCell.frame, from: self)
+            snapshotFrame.origin.y += 70
+            let selectedColor = colors[indexPath.row]
+            switch transitionStyle {
+            case .movingSelectedViewToNextView(selectedView: _, selectedViewFrame: _):
+                didTapItem?(.movingSelectedViewToNextView(selectedView: snapshotView, selectedViewFrame: snapshotFrame), selectedColor)
+            case .growingView(initalFrame: _):
+                didTapItem?(.growingView(initalFrame: snapshotFrame), selectedColor)
+            case .spinSelectedView(_, frame: _):
+                didTapItem?(.spinSelectedView(snapshotView, frame: snapshotFrame), selectedColor)
+            default: break
             }
         }
     }
 }
 
-extension ViewController: UICollectionViewDataSource {
+extension TransitionStyleTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return colors.count
     }

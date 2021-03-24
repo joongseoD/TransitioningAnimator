@@ -7,11 +7,7 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, TransitionDestination {
-    var animationViews: [UIView] {
-        return [thumbnailImageView, tableView]
-    }
-    
+class DetailViewController: UIViewController {
     @IBOutlet weak var thumbnailImageView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -44,6 +40,12 @@ class DetailViewController: UIViewController, TransitionDestination {
         } else {
             dismiss(animated: true, completion: nil)
         }
+    }
+}
+
+extension DetailViewController: TransitionDestination {
+    var animationViews: [UIView] {
+        return [thumbnailImageView, tableView]
     }
 }
 

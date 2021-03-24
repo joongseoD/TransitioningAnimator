@@ -8,11 +8,7 @@
 import UIKit
 
 class TransitionAnimatingDelegate: NSObject {
-    private var transitionStyle: TransitionAnimatingStyle?
-    
-    func set(transition: TransitionAnimatingStyle) {
-        transitionStyle = transition
-    }
+    var transitionStyle: TransitionAnimatingStyle?
 }
 
 extension TransitionAnimatingDelegate: UINavigationControllerDelegate {
