@@ -96,8 +96,9 @@ extension TransitionStyleTableViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let selectedCell = collectionView.cellForItem(at: indexPath),
            let snapshotView = selectedCell.snapshotView(afterScreenUpdates: true) {
-            var snapshotFrame = superview!.convert(selectedCell.frame, from: self)
-            snapshotFrame.origin.y += 70
+            var snapshotFrame = collectionView.superview!.convert(selectedCell.frame, from: collectionView)
+            let collectionCellFrame = superview!.convert(selectedCell.frame, from: self)
+            snapshotFrame.origin.y = collectionCellFrame.origin.y + 70
             let selectedColor = colors[indexPath.row]
             switch transitionStyle {
             case .movingSelectedViewToNextView(selectedView: _, selectedViewFrame: _):

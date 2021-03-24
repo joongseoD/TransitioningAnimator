@@ -45,7 +45,7 @@ class DetailViewController: UIViewController {
 
 extension DetailViewController: TransitionDestination {
     var animationViews: [UIView] {
-        return [thumbnailImageView, tableView]
+        return [thumbnailImageView, tableView, titleLabel]
     }
 }
 

@@ -46,26 +46,27 @@ extension SpinSelectedViewAnimationTransitioning: UIViewControllerAnimatedTransi
         guard let detinationAnimationView = destinationController.animationViews.first else { return }
         let imageViewRect = detinationAnimationView.convert(detinationAnimationView.bounds, to: destinationController.view)
         
-        //key frame 
-        UIView.animate(withDuration: 0.3) {
-            self.selectedView.transform = CGAffineTransform(scaleX: 2, y: 2)
-            self.selectedView.center = containerView.center
-        }
         
-        UIView.animate(withDuration: 0.3, delay: 0.3) { [weak self] in
-            self?.selectedView.transform = CGAffineTransform(rotationAngle: .pi)
+        UIView.animate(withDuration: duration/3) { [weak self] in
+            self?.selectedView.transform = CGAffineTransform(scaleX: 2, y: 2)
+            self?.selectedView.center = containerView.center
+        } completion: { [weak self] _ in
+            guard let self = self else { return }
+            UIView.animate(withDuration: self.duration/3) { [weak self] in
+                self?.selectedView.transform = CGAffineTransform(rotationAngle: .pi)
+            } completion: { [weak self] _ in
+                guard let self = self else { return }
+                self.selectedView.transform = .identity
+                UIView.animate(withDuration: self.duration/4) { [weak self] in
+                    self?.selectedView.transform = .identity
+                    self?.selectedView.frame = imageViewRect
+                } completion: {  [weak self] in
+                    toView.alpha = 1
+                    backgroundView.removeFromSuperview()
+                    self?.selectedView.removeFromSuperview()
+                    transitionContext.completeTransition($0)
+                }
+            }
         }
-        
-        UIView.animate(withDuration: 0.4, delay: 0.6) { [weak self] in
-            self?.selectedView.transform = .identity
-            self?.selectedView.frame = imageViewRect
-            
-        } completion: {  [weak self] in
-            toView.alpha = 1
-            backgroundView.removeFromSuperview()
-            self?.selectedView.removeFromSuperview()
-            transitionContext.completeTransition($0)
-        }
-
     }
 }

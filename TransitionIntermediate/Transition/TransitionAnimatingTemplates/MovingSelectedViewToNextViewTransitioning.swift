@@ -35,7 +35,7 @@ extension MovingSelectedViewToNextViewTransitioning: UIViewControllerAnimatedTra
             return
         }
         guard let destinationController = transitionContext.viewController(forKey: .to) as? TransitionDestination,
-              destinationController.animationViews.count >= 2 else {
+              destinationController.animationViews.count >= 3 else {
             transitionContext.completeTransition(false)
             return
         }
@@ -48,18 +48,22 @@ extension MovingSelectedViewToNextViewTransitioning: UIViewControllerAnimatedTra
         
         let destinationView = destinationController.animationViews[0]
         let moveUpView = destinationController.animationViews[1]
+        let moveToLeftView = destinationController.animationViews[2]
         let destinationViewRect = destinationView.convert(destinationView.bounds, to: destinationController.view)
         let moveUpViewRect = moveUpView.convert(moveUpView.bounds, to: destinationController.view)
+        let moveToLeftViewRect = moveToLeftView.convert(moveToLeftView.bounds, to: destinationController.view)
         
         toView.alpha = 0
         destinationView.alpha = 0
         selectedView.frame = initalFrame
         moveUpView.frame = CGRect(x: 0, y: moveUpViewRect.minY, width: moveUpViewRect.width, height: 100)
+        moveToLeftView.frame = CGRect(x: containerView.frame.width + 10, y: moveToLeftViewRect.origin.y, width: moveToLeftViewRect.width, height: moveToLeftViewRect.height)
         
         UIView.animate(withDuration: duration) { [weak self] in
             guard let self = self else { return }
             self.selectedView.frame = destinationViewRect
             moveUpView.frame = moveUpViewRect
+            moveToLeftView.frame = moveToLeftViewRect
             toView.alpha = 1
         } completion: { [weak self] in
             destinationView.alpha = 1
