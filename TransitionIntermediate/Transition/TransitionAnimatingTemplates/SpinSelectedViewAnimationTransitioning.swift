@@ -6,20 +6,19 @@
 //
 
 import UIKit
-
+protocol SpinSelectedViewAnimationTransitioningDestination: TransitioningDestination {
+    var spinningView: UIView { get }
+}
 class SpinSelectedViewAnimationTransitioning: NSObject, TransitionAnimator {
     var duration = 1.0
     var isPresenting = false
     var selectedView: UIView
     var initialFrame: CGRect = .zero
-    init(selectedView: UIView, initialFrame: CGRect) {
+    
+    init?(selectedView: UIView, initialFrame: CGRect, isPresenting: Bool) {
+        guard isPresenting else { return nil }
         self.selectedView = selectedView
         self.initialFrame = initialFrame
-    }
-    
-    func transitioningAnimator(isPresenting: Bool) -> Self? {
-        self.isPresenting = isPresenting
-        return isPresenting ? self : nil
     }
 }
 
@@ -42,8 +41,8 @@ extension SpinSelectedViewAnimationTransitioning: UIViewControllerAnimatedTransi
         containerView.addSubview(backgroundView)
         containerView.addSubview(selectedView)
         selectedView.frame = initialFrame
-        guard let destinationController = transitionContext.viewController(forKey: .to) as? TransitionDestination else { return }
-        guard let detinationAnimationView = destinationController.animationViews.first else { return }
+        guard let destinationController = transitionContext.viewController(forKey: .to) as? SpinSelectedViewAnimationTransitioningDestination else { return }
+        let detinationAnimationView = destinationController.spinningView
         let imageViewRect = detinationAnimationView.convert(detinationAnimationView.bounds, to: destinationController.view)
         
         

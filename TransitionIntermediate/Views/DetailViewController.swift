@@ -12,12 +12,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    fileprivate var data = (0...100).map { String($0) }
+    private var data = (0...100).map { String($0) }
     var thumbnamilImageViewBackgroundColor: UIColor = .red
-    
-    deinit {
-        print("deinit")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,14 +39,7 @@ class DetailViewController: UIViewController {
     }
 }
 
-extension DetailViewController: TransitionDestination {
-    var animationViews: [UIView] {
-        return [thumbnailImageView, tableView, titleLabel]
-    }
-}
-
 extension DetailViewController: UITableViewDelegate {
-    
 }
 
 extension DetailViewController: UITableViewDataSource {
@@ -64,3 +53,24 @@ extension DetailViewController: UITableViewDataSource {
         return cell
     }
 }
+
+extension DetailViewController: MovingSelectedViewTransitioningDestination {
+    var movingView: UIView {
+        return thumbnailImageView
+    }
+    
+    var slidingView: (toLeft: Bool, view: UIView) {
+        return (true, titleLabel)
+    }
+    
+    var slideUpView: UIView {
+        return tableView
+    }
+}
+
+extension DetailViewController: SpinSelectedViewAnimationTransitioningDestination {
+    var spinningView: UIView {
+        return thumbnailImageView
+    }
+}
+

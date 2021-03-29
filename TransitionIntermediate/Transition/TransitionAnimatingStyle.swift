@@ -8,20 +8,20 @@
 import UIKit
 
 enum TransitionAnimatingStyle {
+    typealias AnimatedTransitioning = UIViewControllerAnimatedTransitioning & TransitionAnimator
+    
     case movingSelectedViewToNextView(selectedView: UIView, selectedViewFrame: CGRect)
     case growingView(initalFrame: CGRect)
     case spinSelectedView(_ view: UIView, frame: CGRect)
     
-    var animator: (UIViewControllerAnimatedTransitioning & TransitionAnimator)? {
+    func getAnimator(for destination: UIViewController, isPresenting: Bool) -> AnimatedTransitioning? {
         switch self {
         case let .movingSelectedViewToNextView(selectedView, frame):
-            return MovingSelectedViewToNextViewTransitioning(selectedView: selectedView, initalFrame: frame)
+            return MovingSelectedViewToNextViewTransitioning(selectedView: selectedView, initalFrame: frame, isPresenting: isPresenting)
         case let .growingView(initalFrame):
-            return GrowingViewAnimationTransitioning(initialFrame: initalFrame)
+            return GrowingViewAnimationTransitioning(initialFrame: initalFrame, isPresenting: isPresenting)
         case let .spinSelectedView(view, frame):
-            return SpinSelectedViewAnimationTransitioning(selectedView: view, initialFrame: frame)
-        default:
-            return nil
+            return SpinSelectedViewAnimationTransitioning(selectedView: view, initialFrame: frame, isPresenting: isPresenting)
         }
     }
 }

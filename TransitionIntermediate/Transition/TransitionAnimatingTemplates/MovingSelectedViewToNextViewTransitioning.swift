@@ -7,20 +7,22 @@
 
 import UIKit
 
+protocol MovingSelectedViewTransitioningDestination: TransitioningDestination {
+    var movingView: UIView { get }
+    var slidingView: (toLeft: Bool, view: UIView) { get }
+    var slideUpView: UIView { get }
+}
+
 class MovingSelectedViewToNextViewTransitioning: NSObject, TransitionAnimator {
     var isPresenting = false
     var duration = 0.4
     let selectedView: UIView
     var initalFrame: CGRect
     
-    init(selectedView: UIView, initalFrame: CGRect) {
+    init(selectedView: UIView, initalFrame: CGRect, isPresenting: Bool) {
         self.selectedView = selectedView
         self.initalFrame = initalFrame
-    }
-    
-    func transitioningAnimator(isPresenting: Bool) -> Self? {
         self.isPresenting = isPresenting
-        return isPresenting ? self : nil
     }
 }
 
@@ -30,12 +32,19 @@ extension MovingSelectedViewToNextViewTransitioning: UIViewControllerAnimatedTra
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        if isPresenting {
+            presentAnimation(transitionContext)
+        } else {
+            dismissAnimation(transitionContext)
+        }
+    }
+    
+    private func presentAnimation(_ transitionContext: UIViewControllerContextTransitioning) {
         guard let toView = transitionContext.view(forKey: .to) else {
             transitionContext.completeTransition(false)
             return
         }
-        guard let destinationController = transitionContext.viewController(forKey: .to) as? TransitionDestination,
-              destinationController.animationViews.count >= 3 else {
+        guard let destinationController = transitionContext.viewController(forKey: .to) as? MovingSelectedViewTransitioningDestination else {
             transitionContext.completeTransition(false)
             return
         }
@@ -46,9 +55,9 @@ extension MovingSelectedViewToNextViewTransitioning: UIViewControllerAnimatedTra
         containerView.addSubview(backgroundView)
         containerView.addSubview(selectedView)
         
-        let destinationView = destinationController.animationViews[0]
-        let moveUpView = destinationController.animationViews[1]
-        let moveToLeftView = destinationController.animationViews[2]
+        let destinationView = destinationController.movingView
+        let moveUpView = destinationController.slideUpView
+        let moveToLeftView = destinationController.slidingView.view
         let destinationViewRect = destinationView.convert(destinationView.bounds, to: destinationController.view)
         let moveUpViewRect = moveUpView.convert(moveUpView.bounds, to: destinationController.view)
         let moveToLeftViewRect = moveToLeftView.convert(moveToLeftView.bounds, to: destinationController.view)
@@ -57,7 +66,12 @@ extension MovingSelectedViewToNextViewTransitioning: UIViewControllerAnimatedTra
         destinationView.alpha = 0
         selectedView.frame = initalFrame
         moveUpView.frame = CGRect(x: 0, y: moveUpViewRect.minY, width: moveUpViewRect.width, height: 100)
-        moveToLeftView.frame = CGRect(x: containerView.frame.width + 10, y: moveToLeftViewRect.origin.y, width: moveToLeftViewRect.width, height: moveToLeftViewRect.height)
+        
+        if destinationController.slidingView.toLeft {
+            moveToLeftView.frame = CGRect(x: containerView.frame.width + 10, y: moveToLeftViewRect.origin.y, width: moveToLeftViewRect.width, height: moveToLeftViewRect.height)
+        } else {
+            moveToLeftView.frame = CGRect(x: -(moveToLeftViewRect.width + 10), y: moveToLeftViewRect.origin.y, width: moveToLeftViewRect.width, height: moveToLeftViewRect.height)
+        }
         
         UIView.animate(withDuration: duration) { [weak self] in
             guard let self = self else { return }
@@ -68,6 +82,27 @@ extension MovingSelectedViewToNextViewTransitioning: UIViewControllerAnimatedTra
         } completion: { [weak self] in
             destinationView.alpha = 1
             backgroundView.removeFromSuperview()
+            self?.selectedView.removeFromSuperview()
+            transitionContext.completeTransition($0)
+        }
+    }
+    
+    private func dismissAnimation(_ transitionContext: UIViewControllerContextTransitioning) {
+        guard let fromView = transitionContext.view(forKey: .from) else {
+            transitionContext.completeTransition(false)
+            return
+        }
+        guard let destinationViewController = transitionContext.viewController(forKey: .from) as? MovingSelectedViewTransitioningDestination else { return }
+        let containerView = transitionContext.containerView
+        containerView.addSubview(selectedView)
+        let destinationView = destinationViewController.movingView
+        
+        
+        selectedView.frame = destinationView.convert(destinationView.bounds, to: destinationViewController.view)
+        UIView.animate(withDuration: duration) { [weak self] in
+            guard let self = self else { return }
+            self.selectedView.frame = self.initalFrame
+        } completion: { [weak self] in
             self?.selectedView.removeFromSuperview()
             transitionContext.completeTransition($0)
         }

@@ -12,13 +12,9 @@ class GrowingViewAnimationTransitioning: NSObject, TransitionAnimator {
     var isPresenting: Bool = false
     var originFrame = CGRect.zero
     
-    init(initialFrame: CGRect) {
+    init(initialFrame: CGRect, isPresenting: Bool) {
         self.originFrame = initialFrame
-    }
-    
-    func transitioningAnimator(isPresenting: Bool) -> Self? {
         self.isPresenting = isPresenting
-        return self
     }
 }
 

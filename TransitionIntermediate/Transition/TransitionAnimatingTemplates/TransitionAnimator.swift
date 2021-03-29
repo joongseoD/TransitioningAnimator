@@ -7,13 +7,9 @@
 
 import UIKit
 
+protocol TransitioningDestination where Self: UIViewController {}
+
 protocol TransitionAnimator {
     var duration: TimeInterval { get set }
-    var isPresenting: Bool { get set }
-    
-    func transitioningAnimator(isPresenting: Bool) -> Self?
-}
-
-protocol TransitionDestination where Self: UIViewController {
-    var animationViews: [UIView] { get }
+    var isPresenting: Bool { get set } 
 }

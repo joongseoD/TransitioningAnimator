@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D14293972609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14293962609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift */; };
+		D1678A27260C7421005F5CE7 /* Detail2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1678A26260C7421005F5CE7 /* Detail2ViewController.swift */; };
 		D18ED25C2608571A00029085 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED25B2608571A00029085 /* AppDelegate.swift */; };
 		D18ED25E2608571A00029085 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED25D2608571A00029085 /* SceneDelegate.swift */; };
 		D18ED2602608571A00029085 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED25F2608571A00029085 /* ViewController.swift */; };
@@ -18,12 +19,13 @@
 		D18ED27426085DDA00029085 /* TransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED27326085DDA00029085 /* TransitionAnimator.swift */; };
 		D18ED2932609E8EA00029085 /* MovingSelectedViewToNextViewTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED2922609E8EA00029085 /* MovingSelectedViewToNextViewTransitioning.swift */; };
 		D18ED2972609E99300029085 /* TransitionAnimatingStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED2962609E99300029085 /* TransitionAnimatingStyle.swift */; };
-		D18ED29A2609EA3100029085 /* TransitionAnimatingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED2992609EA3100029085 /* TransitionAnimatingDelegate.swift */; };
+		D18ED29A2609EA3100029085 /* TransitionAnimatingDelegator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED2992609EA3100029085 /* TransitionAnimatingDelegator.swift */; };
 		D18ED29F2609F07700029085 /* GrowingViewAnimationTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18ED29E2609F07700029085 /* GrowingViewAnimationTransitioning.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D14293962609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinSelectedViewAnimationTransitioning.swift; sourceTree = "<group>"; };
+		D1678A26260C7421005F5CE7 /* Detail2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Detail2ViewController.swift; sourceTree = "<group>"; };
 		D18ED2582608571A00029085 /* TransitionIntermediate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransitionIntermediate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D18ED25B2608571A00029085 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D18ED25D2608571A00029085 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -36,7 +38,7 @@
 		D18ED27326085DDA00029085 /* TransitionAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionAnimator.swift; sourceTree = "<group>"; };
 		D18ED2922609E8EA00029085 /* MovingSelectedViewToNextViewTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovingSelectedViewToNextViewTransitioning.swift; sourceTree = "<group>"; };
 		D18ED2962609E99300029085 /* TransitionAnimatingStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionAnimatingStyle.swift; sourceTree = "<group>"; };
-		D18ED2992609EA3100029085 /* TransitionAnimatingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionAnimatingDelegate.swift; sourceTree = "<group>"; };
+		D18ED2992609EA3100029085 /* TransitionAnimatingDelegator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionAnimatingDelegator.swift; sourceTree = "<group>"; };
 		D18ED29E2609F07700029085 /* GrowingViewAnimationTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingViewAnimationTransitioning.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -51,6 +53,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D1678A9B260D6B08005F5CE7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D18ED25F2608571A00029085 /* ViewController.swift */,
+				D18ED2702608592400029085 /* DetailViewController.swift */,
+				D1678A26260C7421005F5CE7 /* Detail2ViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		D18ED24F2608571A00029085 = {
 			isa = PBXGroup;
 			children = (
@@ -71,11 +83,10 @@
 			isa = PBXGroup;
 			children = (
 				D18ED2902609E8A100029085 /* Transition */,
-				D18ED25B2608571A00029085 /* AppDelegate.swift */,
-				D18ED25D2608571A00029085 /* SceneDelegate.swift */,
-				D18ED25F2608571A00029085 /* ViewController.swift */,
-				D18ED2702608592400029085 /* DetailViewController.swift */,
+				D1678A9B260D6B08005F5CE7 /* Views */,
 				D18ED2612608571A00029085 /* Main.storyboard */,
+				D18ED25D2608571A00029085 /* SceneDelegate.swift */,
+				D18ED25B2608571A00029085 /* AppDelegate.swift */,
 				D18ED2642608571D00029085 /* Assets.xcassets */,
 				D18ED2662608571D00029085 /* LaunchScreen.storyboard */,
 				D18ED2692608571D00029085 /* Info.plist */,
@@ -86,7 +97,7 @@
 		D18ED2902609E8A100029085 /* Transition */ = {
 			isa = PBXGroup;
 			children = (
-				D18ED2992609EA3100029085 /* TransitionAnimatingDelegate.swift */,
+				D18ED2992609EA3100029085 /* TransitionAnimatingDelegator.swift */,
 				D18ED2962609E99300029085 /* TransitionAnimatingStyle.swift */,
 				D18ED2912609E8B600029085 /* TransitionAnimatingTemplates */,
 			);
@@ -175,6 +186,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D14293972609F46F00EECB13 /* SpinSelectedViewAnimationTransitioning.swift in Sources */,
+				D1678A27260C7421005F5CE7 /* Detail2ViewController.swift in Sources */,
 				D18ED2602608571A00029085 /* ViewController.swift in Sources */,
 				D18ED2972609E99300029085 /* TransitionAnimatingStyle.swift in Sources */,
 				D18ED25C2608571A00029085 /* AppDelegate.swift in Sources */,
@@ -182,7 +194,7 @@
 				D18ED25E2608571A00029085 /* SceneDelegate.swift in Sources */,
 				D18ED2932609E8EA00029085 /* MovingSelectedViewToNextViewTransitioning.swift in Sources */,
 				D18ED29F2609F07700029085 /* GrowingViewAnimationTransitioning.swift in Sources */,
-				D18ED29A2609EA3100029085 /* TransitionAnimatingDelegate.swift in Sources */,
+				D18ED29A2609EA3100029085 /* TransitionAnimatingDelegator.swift in Sources */,
 				D18ED2712608592400029085 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
